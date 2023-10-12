@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiPHi Comment Page</title>
+    <title>Chat with ChatGPT</title>
 </head>
 <body>
-    <h1>Welcome to SiPHi Comment's Webpage</h1>
-    <p>This is a simple starter paragraph.</p>
+    <div>
+        <p>Can you explain your concern in detail? First list the system.</p>
+        <textarea id="userInput" rows="6" cols="50" placeholder="Enter the system and your concern..."></textarea>
+        <button onclick="sendMessage()">Submit</button>
+    </div>
+    <div>
+        <p>Response:</p>
+        <textarea id="response" rows="6" cols="50" readonly></textarea>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
