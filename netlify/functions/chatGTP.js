@@ -13,12 +13,13 @@ exports.handler = async function(event, context) {
         "messages": [{"role": "system", "content": prompt}]
     };
 
+    let response;
     try {
-        const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+        response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + process.env.YOUR_OPENAI_API_KEY // Make sure this key is set in Netlify's environment variables
+                'Authorization': 'Bearer ' + process.env.YOUR_OPENAI_API_KEY
             },
             body: JSON.stringify(payload)
         });
@@ -30,9 +31,14 @@ exports.handler = async function(event, context) {
         };
     } catch (error) {
         console.error("Error communicating with OpenAI:", error);
+        console.log("Incoming event:", event);
+        if (response) {
+            console.log("OpenAI response:", response);
+        }
+
         return {
             statusCode: 500,
-            body: "Internal Server Error"
+            body: `Internal Server Error: ${error.message}`
         };
     }
 };
