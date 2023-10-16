@@ -12,23 +12,48 @@
 
 <div id="response" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;"></div>
 
+<button onclick="copyToClipboard()" style="margin-top: 10px;">Copy</button>
+
 <script>
   async function sendRequest() {
-    let userInput = document.getElementById('userInput').value;
-    let responseDiv = document.getElementById('response');
+    try {
+      let userInput = document.getElementById('userInput').value;
+      let responseDiv = document.getElementById('response');
 
-    // Send the API request to your Netlify function
-    let response = await fetch('/.netlify/functions/chatgpt', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ text: userInput })
-    });
+      // Send the API request to your Netlify function
+      let response = await fetch('/.netlify/functions/chatgpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: userInput })
+      });
 
-    // Parse and display the response
-    let data = await response.json();
-    responseDiv.innerText = data.text;
+      if (!response.ok) {
+        throw new Error(`Failed to fetch from server: ${response.statusText}`);
+      }
+
+      // Parse and display the response
+      let data = await response.json();
+      responseDiv.innerText = data.text;
+    } catch (error) {
+      console.error(error);
+      document.getElementById('response').innerText = `Error: ${error.message}`;
+    }
+  }
+
+  function copyToClipboard() {
+    const str = document.getElementById('response').innerText;
+    const el = document.createElement('textarea');  // Create a <textarea> element
+    el.value = str;                                // Set its value to the string that you want copied
+    el.setAttribute('readonly', '');               // Make it read-only to be tamper-proof
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();                                    // Select the text inside the textarea
+    document.execCommand('copy');                   // Copy the text to the clipboard
+    document.body.removeChild(el);                  // Remove the textarea element
+    alert('Text has been copied to clipboard');     // Notify the user
   }
 </script>
 
