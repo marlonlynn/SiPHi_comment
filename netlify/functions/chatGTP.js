@@ -11,28 +11,21 @@ exports.handler = async function(event, context) {
         organization: "org-syQpbq1CgeDtHJWdRpujl1gf",
         apiKey: process.env.YOUR_OPENAI_API_KEY
     });
+
     const openai = new OpenAIApi(configuration);
 
-    const body = JSON.parse(event.body);
-    const userInput = body.userInput;
-    const prePrompt = 'Please rewrite the following text as a qualified home inspector describing a concern during a home inspection to a client with a 10th grade education that does not know anything about construction. You should also describe why this deficiency should be a concern to the client:'
-
-    // Structure the API call payload
-    const payload = {
-        model: "text-davinci-003",
-        messages: [
-            { role: "user", content: `${prePrompt}: ${userInput}` }
-        ]
-    };
-
     try {
-        const response = await openai.complete(payload);
+        const response = await openai.edits.create({
+            model: "text-davinci-edit-001",
+            input: "What is your concern?",
+            instruction: "Please rewrite the following text as a qualified home inspector describing a concern during a home inspection to a client with a 10th grade education that does not know anything about construction. You should also describe why this deficiency should be a concern to the client."
+        });
 
         if (response && response.choices && response.choices.length > 0) {
             return {
                 statusCode: 200,
                 body: JSON.stringify({
-                    message: response.choices[0].message.content.trim()
+                    message: response.choices[0].text.trim()
                 })
             };
         } else {
