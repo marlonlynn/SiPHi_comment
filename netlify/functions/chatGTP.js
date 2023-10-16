@@ -14,7 +14,6 @@ exports.handler = async function(event, context) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'text-davinci-003',
         prompt: fullPrompt,
         max_tokens: 960
       })
