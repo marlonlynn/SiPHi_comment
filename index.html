@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiPHi concern AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Inspection Concerns Editor</title>
 </head>
 <body>
-    <div>
-        <p>Can you explain your concern in detail? First list the system.</p>
-        <textarea id="userInput" rows="6" cols="50" placeholder="Enter the system and your concern..."></textarea>
-        <button onclick="sendMessage()">Submit</button>
-    </div>
-    <div>
-        <p>Response:</p>
-        <textarea id="response" rows="6" cols="50" readonly></textarea>
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    </div>
 
-    <script src="script.js"></script>
+<input type="text" id="userInput" placeholder="Type the concern here..." style="width: 80%; height: 50px;">
+<button onclick="sendRequest()">Edit Concern</button>
+
+<div id="response" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;"></div>
+
+<script>
+  async function sendRequest() {
+    let userInput = document.getElementById('userInput').value;
+    let responseDiv = document.getElementById('response');
+
+    // Send the API request to your Netlify function
+    let response = await fetch('/.netlify/functions/chatgpt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: userInput })
+    });
+
+    // Parse and display the response
+    let data = await response.json();
+    responseDiv.innerText = data.text;
+  }
+</script>
+
 </body>
 </html>
