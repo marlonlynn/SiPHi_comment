@@ -19,7 +19,7 @@ exports.handler = async function(event, context) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + process.env.YOUR_OPENAI_API_KEY
+                'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
             },
             body: JSON.stringify(payload)
         });
