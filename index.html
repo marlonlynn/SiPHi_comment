@@ -4,15 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home Inspection Concerns Editor</title>
+<style>
+  textarea, #response {
+    width: 80%;
+    height: 20vh; /* Adjust this value to fit your design, vh is relative to the viewport height */
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  button {
+    display: block;
+    margin: 10px auto;
+  }
+</style>
 </head>
 <body>
 
-<input type="text" id="userInput" placeholder="Type the concern here..." style="width: 80%; height: 50px;">
-<button onclick="sendRequest()">Edit Concern</button>
+<p>Add your concern below and provide as much detail as possible.</p>
+<textarea id="userInput" placeholder="Type the concern here..." wrap="soft"></textarea>
+<button onclick="sendRequest()">Translate concern with AI</button>
 
-<div id="response" style="margin-top: 20px; padding: 20px; border: 1px solid #ccc;"></div>
+<div id="response"></div>
 
-<button onclick="copyToClipboard()" style="margin-top: 10px;">Copy</button>
+<button onclick="copyToClipboard()">Copy Concern to Clipboard</button>
 
 <script>
   async function sendRequest() {
@@ -36,24 +51,26 @@
       // Parse and display the response
       let data = await response.json();
       responseDiv.innerText = data.text;
+
+    // Copy the response text to the clipboard
+    copyToClipboard(data.text);
     } catch (error) {
       console.error(error);
       document.getElementById('response').innerText = `Error: ${error.message}`;
     }
   }
 
-  function copyToClipboard() {
-    const str = document.getElementById('response').innerText;
-    const el = document.createElement('textarea');  // Create a <textarea> element
-    el.value = str;                                // Set its value to the string that you want copied
-    el.setAttribute('readonly', '');               // Make it read-only to be tamper-proof
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-    document.body.appendChild(el);
-    el.select();                                    // Select the text inside the textarea
-    document.execCommand('copy');                   // Copy the text to the clipboard
-    document.body.removeChild(el);                  // Remove the textarea element
-    alert('Text has been copied to clipboard');     // Notify the user
+function copyToClipboard(text) {
+  const el = document.createElement('textarea');  // Create a <textarea> element
+  el.value = text;                                // Set its value to the text that you want copied
+  el.setAttribute('readonly', '');                // Make it read-only to be tamper-proof
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();                                    // Select the text inside the textarea
+  document.execCommand('copy');                   // Copy the text to the clipboard
+  document.body.removeChild(el);                  // Remove the textarea element
+  alert('Text has been copied to clipboard');     // Notify the user
   }
 </script>
 
