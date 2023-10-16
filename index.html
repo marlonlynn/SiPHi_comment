@@ -21,7 +21,7 @@
       let responseDiv = document.getElementById('response');
 
       // Send the API request to your Netlify function
-      let response = await fetch('/.netlify/functions/chatgpt', {
+      let response = await fetch('/.netlify/functions/chatgpt.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
