@@ -10,7 +10,7 @@ exports.handler = async function(event, context) {
     const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.YOUR_OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${process.env.SIPHI_OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -21,7 +21,8 @@ exports.handler = async function(event, context) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch from OpenAI: ${response.statusText}`);
+      const errorResponse = await response.text();  // Get more error details
+      throw new Error(`Failed to fetch from OpenAI: ${response.statusText}. Details: ${errorResponse}`);
     }
 
     const data = await response.json();
