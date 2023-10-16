@@ -3,6 +3,7 @@ const { Configuration, OpenAIApi } = require("openai");
 // Initialize Configuration
 let configuration;
 let openai;
+
 try {
     configuration = new Configuration({
         organization: "org-syQpbq1CgeDtHJWdRpujl1gf",
@@ -11,6 +12,7 @@ try {
     openai = new OpenAIApi(configuration);
 } catch (err) {
     console.error("Error initializing OpenAI Configuration:", err);
+}
 
 // Netlify serverless function
 exports.handler = async function(event, context) {
