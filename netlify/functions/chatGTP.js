@@ -4,7 +4,7 @@ exports.handler = async function(event, context) {
   try {
     const { text } = JSON.parse(event.body);
 
-    const prePrompt = "Please rewrite the following text as an opinion of a qualified home inspector describing a concern during a home inspection to a client with a 12th grade education with limited construction knowledge. You should also describe why this deficiency should be a concern to the client. Any concern that is of an urgent type should be refered to a licensed professional.";
+    const prePrompt = "Please rephrase the text below, assuming the role of an experienced home inspector addressing a client with a high school education and limited construction knowledge. Your explanation should not only highlight the concern identified during the home inspection but also serve as an educational insight into why the particular deficiency is a matter of concern. In instances where the concern is urgent, advise the client to consult a licensed professional for further examination and remediation. Please avoid beginning the explanation with 'during the inspection', and aim to enhance the client's understanding of the situation.";
     const fullPrompt = `${prePrompt}\n\n${text}`;
 
     const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
