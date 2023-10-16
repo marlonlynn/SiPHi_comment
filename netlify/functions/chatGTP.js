@@ -1,14 +1,15 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { Configuration } = require("openai");
+
+import { Configuration } from "openai";
 
 // Initialize Configuration
 let configuration;
 let openai;
 
-try {
-    configuration = new Configuration({
-        organization: "org-syQpbq1CgeDtHJWdRpujl1gf",
-        apiKey: process.env.YOUR_OPENAI_API_KEY,
-    });
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
     openai = new OpenAIApi(configuration);
 } catch (err) {
     console.error("Error initializing OpenAI Configuration:", err);
