@@ -1,19 +1,17 @@
-const { Configuration } = require("openai");
-
-// Initialize Configuration
-let openai;
-
-try {
-    openai = new OpenAIApi(process.env.YOUR_OPENAI_API_KEY);
-} catch (err) {
-    console.error("Error initializing OpenAI:", err);
-}
+import { Configuration, OpenAIApi } from "openai";
 
 // Netlify serverless function
 exports.handler = async function(event, context) {
     if (event.httpMethod !== "POST") {
         return { statusCode: 405, body: "Method Not Allowed" };
     }
+
+    // Initialize the OpenAI API
+    const configuration = new Configuration({
+        organization: "org-syQpbq1CgeDtHJWdRpujl1gf",
+        apiKey: process.env.YOUR_OPENAI_API_KEY
+    });
+    const openai = new OpenAIApi(configuration);
 
     const body = JSON.parse(event.body);
     const userInput = body.userInput;
@@ -28,25 +26,25 @@ exports.handler = async function(event, context) {
     };
 
     try {
-            const response = await openai.complete(payload);
+        const response = await openai.complete(payload);
 
-            if (response && response.choices && response.choices.length > 0) {
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        message: response.choices[0].message.content.trim()
-                    })
-                };
-            } else {
-                throw new Error("Failed to get a valid response from OpenAI.");
-            }
-        } catch (error) {
-            console.error("Error calling OpenAI:", error);
+        if (response && response.choices && response.choices.length > 0) {
             return {
-                statusCode: 500,
+                statusCode: 200,
                 body: JSON.stringify({
-                    error: "An error occurred while processing your request.",
-                    description: error.message
+                    message: response.choices[0].message.content.trim()
+                })
+            };
+        } else {
+            throw new Error("Failed to get a valid response from OpenAI.");
+        }
+    } catch (error) {
+        console.error("Error calling OpenAI:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                error: "An error occurred while processing your request.",
+                description: error.message
             })
         };
     }
