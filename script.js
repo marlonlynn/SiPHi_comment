@@ -16,28 +16,18 @@ async function sendMessage() {
         });
 
         const data = await response.json();
-
-        // Check if the response was successful.
-        if (response.ok) {
-            if (data && data.message) {
-                responseElement.value = data.message;
-            } else {
-                // Case: Successful response but unexpected format.
-                responseElement.value = "Received an unexpected response format.";
-            }
+        if(data && data.message) {
+            responseElement.value = data.message;
+        } else if (data && data.error) {  // Check for an error field in the response.
+            responseElement.value = "Error: " + data.error;
         } else {
-            // Case: Server returned an error.
-            let errorMessage = "An error occurred while processing your request.";
-            if (data && data.error) {
-                errorMessage += " " + data.error;
-            }
-            responseElement.value = errorMessage;
+            console.error("Unexpected response format:", JSON.stringify(data, null, 2));
+            responseElement.value = "An unexpected error occurred.";
         }
 
     } catch (error) {
-        // Case: Network or other errors.
-        responseElement.value = "Error communicating with the server: " + error.message;
         console.error("Error communicating with the function:", error);
+        responseElement.value = "Communication error: " + error.message;
     }
 }
 
