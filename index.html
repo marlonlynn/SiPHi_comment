@@ -8,15 +8,27 @@
   body {
     font-size: 1.3em; /* Increase base font size */
   }
-  textarea, #response {
+  #userInput {
     width: calc(100% - 20px);
-    height: 30vh; /* Increased height for more text */
+    height: 15vh; /* Reduced height */
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: inherit; /* Inherit font size from body */
+    overflow: auto; /* Overflow property */
+  }
+  #response {
+    width: calc(100% - 20px);
+    height: 40vh; /* Increased height */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: inherit; /* Inherit font size from body */
+    overflow: auto; /* Overflow property */
   }
   button {
     display: block;
@@ -67,15 +79,14 @@
     }
   }
 
-  function copyToClipboard() {
-    const responseDiv = document.getElementById('response');
-    const range = document.createRange();
-    range.selectNodeContents(responseDiv);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    document.execCommand('copy');
-    alert('Text has been copied to clipboard');
+  async function copyToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('Text has been copied to clipboard');
+    } catch (err) {
+      console.error('Error in copy operation: ', err);
+      alert('Failed to copy text.');
+    }
   }
 </script>
 
