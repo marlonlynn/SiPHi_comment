@@ -3,20 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Inspection Concerns Editor</title>
+<title>Inspection Concerns Editor</title>
 <style>
+  body {
+    font-size: 1.3em; /* Increase base font size */
+  }
   textarea, #response {
     width: calc(100% - 20px);
-    height: 20vh;
+    height: 30vh; /* Increased height for more text */
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-size: inherit; /* Inherit font size from body */
   }
   button {
     display: block;
     margin: 10px auto;
+    padding: 10px 20px; /* Increased padding for larger button */
+    font-size: inherit; /* Inherit font size from body */
   }
 </style>
 </head>
@@ -26,7 +32,7 @@
 <textarea id="userInput" placeholder="Type the concern here..." wrap="soft"></textarea>
 <button onclick="sendRequest()">Translate concern with AI</button>
 
-<div id="response" contenteditable="true" onfocus="document.execCommand('selectAll',false,null)"></div>
+<div id="response" contenteditable="true"></div>
 
 <button onclick="copyToClipboard()">Copy Concern to Clipboard</button>
 
@@ -63,7 +69,11 @@
 
   function copyToClipboard() {
     const responseDiv = document.getElementById('response');
-    responseDiv.focus();
+    const range = document.createRange();
+    range.selectNodeContents(responseDiv);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
     document.execCommand('copy');
     alert('Text has been copied to clipboard');
   }
