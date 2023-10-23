@@ -6,12 +6,13 @@
 <title>Home Inspection Concerns Editor</title>
 <style>
   textarea, #response {
-    width: 80%;
-    height: 20vh; /* Adjust this value to fit your design, vh is relative to the viewport height */
-    margin-bottom: 10px;
+    width: calc(100% - 20px);
+    height: 20vh;
+    margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
   }
   button {
     display: block;
@@ -25,7 +26,7 @@
 <textarea id="userInput" placeholder="Type the concern here..." wrap="soft"></textarea>
 <button onclick="sendRequest()">Translate concern with AI</button>
 
-<div id="response"></div>
+<div id="response" contenteditable="true" onfocus="document.execCommand('selectAll',false,null)"></div>
 
 <button onclick="copyToClipboard()">Copy Concern to Clipboard</button>
 
@@ -60,17 +61,11 @@
     }
   }
 
-function copyToClipboard(text) {
-  const el = document.createElement('textarea');  // Create a <textarea> element
-  el.value = text;                                // Set its value to the text that you want copied
-  el.setAttribute('readonly', '');                // Make it read-only to be tamper-proof
-  el.style.position = 'absolute';
-  el.style.left = '-9999px';
-  document.body.appendChild(el);
-  el.select();                                    // Select the text inside the textarea
-  document.execCommand('copy');                   // Copy the text to the clipboard
-  document.body.removeChild(el);                  // Remove the textarea element
-  alert('Text has been copied to clipboard');     // Notify the user
+  function copyToClipboard() {
+    const responseDiv = document.getElementById('response');
+    responseDiv.focus();
+    document.execCommand('copy');
+    alert('Text has been copied to clipboard');
   }
 </script>
 
