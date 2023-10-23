@@ -72,11 +72,14 @@
       let data = await response.json();
       responseDiv.innerText = data.text;
 
-    // Copy the response text to the clipboard
-    copyToClipboard();  // remove data.text argument
+      // No need to call copyToClipboard here as it will be triggered by button click
+    } catch (error) {
+      console.error(error);
+      document.getElementById('response').innerText = `Error: ${error.message}`;
+    }
   }
 
-function copyToClipboard() {
+  function copyToClipboard() {
     const responseDiv = document.getElementById('response');
     const range = document.createRange();
     range.selectNodeContents(responseDiv);
@@ -85,8 +88,6 @@ function copyToClipboard() {
     selection.addRange(range);
     document.execCommand('copy');
     alert('Text has been copied to clipboard');
-}
-
   }
 </script>
 
