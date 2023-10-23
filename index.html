@@ -72,16 +72,13 @@
       responseDiv.innerText = data.text;
 
     // Copy the response text to the clipboard
-    copyToClipboard(data.text);
-    } catch (error) {
-      console.error(error);
-      document.getElementById('response').innerText = `Error: ${error.message}`;
-    }
+    copyToClipboard();  // remove data.text argument
   }
 
-  async function copyToClipboard(text) {
+  async function copyToClipboard() {
     try {
-      await navigator.clipboard.writeText(text);
+      const responseDiv = document.getElementById('response');
+      await navigator.clipboard.writeText(responseDiv.innerText);
       alert('Text has been copied to clipboard');
     } catch (err) {
       console.error('Error in copy operation: ', err);
