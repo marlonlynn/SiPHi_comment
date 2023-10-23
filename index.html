@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inspection Concerns Editor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 <style>
   body {
     font-size: 1.3em; /* Increase base font size */
@@ -46,7 +47,7 @@
 
 <div id="response" contenteditable="true"></div>
 
-<button onclick="copyToClipboard()">Copy Concern to Clipboard</button>
+<button id="copyButton" onclick="copyToClipboard()">Copy Concern to Clipboard</button>
 
 <script>
   async function sendRequest() {
@@ -75,15 +76,17 @@
     copyToClipboard();  // remove data.text argument
   }
 
-  async function copyToClipboard() {
-    try {
-      const responseDiv = document.getElementById('response');
-      await navigator.clipboard.writeText(responseDiv.innerText);
-      alert('Text has been copied to clipboard');
-    } catch (err) {
-      console.error('Error in copy operation: ', err);
-      alert('Failed to copy text.');
-    }
+function copyToClipboard() {
+    const responseDiv = document.getElementById('response');
+    const range = document.createRange();
+    range.selectNodeContents(responseDiv);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+    alert('Text has been copied to clipboard');
+}
+
   }
 </script>
 
