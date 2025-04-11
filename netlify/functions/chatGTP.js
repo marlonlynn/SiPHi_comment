@@ -7,7 +7,7 @@ exports.handler = async function(event, context) {
     const prePrompt = "Please rephrase the text below, assuming the role of an experienced home inspector addressing a client with a high school education and limited construction knowledge. Your explanation should not only highlight the concern identified during the home inspection but also serve as an educational insight into why the particular deficiency is a matter of concern. In instances where the concern is urgent, advise the client to consult a licensed professional for further examination and remediation. Please avoid beginning the explanation with 'during the inspection', and aim to enhance the client's understanding of the situation. Do not include a salutaion.";
     const fullPrompt = `${prePrompt}\n\n${text}`;
 
-    const response = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo-instruct/completions', {
+    const response = await fetch('https://api.openai.com/v1/engines/gpt-4/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.SIPHI_OPENAI_API_KEY}`,
