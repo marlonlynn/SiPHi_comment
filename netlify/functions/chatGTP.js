@@ -4,31 +4,36 @@ exports.handler = async function(event, context) {
   try {
     const { text } = JSON.parse(event.body);
 
-    const prePrompt = "Please rephrase the text below, assuming the role of an experienced home inspector addressing a client with a high school education and limited construction knowledge. Your explanation should not only highlight the concern identified during the home inspection but also serve as an educational insight into why the particular deficiency is a matter of concern. In instances where the concern is urgent, advise the client to consult a licensed professional for further examination and remediation. Please avoid beginning the explanation with 'during the inspection', and aim to enhance the client's understanding of the situation. Do not include a salutaion.";
-    const fullPrompt = `${prePrompt}\n\n${text}`;
+    const systemMessage = "You are an experienced home inspector tasked with explaining inspection concerns to a client with a high school education and little construction knowledge. Be clear, educational, and include why the issue matters. For urgent concerns, recommend consulting a licensed professional. Do not begin with 'During the inspection' and do not include a salutation.";
 
-    const response = await fetch('https://api.openai.com/v1/engines/gpt-4/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.SIPHI_OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        prompt: fullPrompt,
-        max_tokens: 960
+        model: 'gpt-4',
+        messages: [
+          { role: 'system', content: systemMessage },
+          { role: 'user', content: text }
+        ],
+        max_tokens: 960,
+        temperature: 0.7
       })
     });
 
     if (!response.ok) {
-      const errorResponse = await response.text();  // Get more error details
+      const errorResponse = await response.text();
       throw new Error(`Failed to fetch from OpenAI: ${response.statusText}. Details: ${errorResponse}`);
     }
 
     const data = await response.json();
+    const output = data.choices[0].message.content.trim();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ text: data.choices[0].text.trim() })
+      body: JSON.stringify({ text: output })
     };
   } catch (error) {
     console.error(error);
